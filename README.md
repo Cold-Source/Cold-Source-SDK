@@ -1,71 +1,61 @@
-# Source SDK 2013
+# Cold Source SDK
 
-Source code for Source SDK 2013.
+The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
 
-Contains the game code for Half-Life 2, HL2: DM and TF2.
+Currently contains updated game code for:
+*   **Half-Life 2**
+*   **Half-Life 2: Deathmatch**
 
-**Now including Team Fortress 2! ✨**
+---
 
-## Build instructions
-
-Clone the repository using the following command:
-
-`git clone https://github.com/ValveSoftware/source-sdk-2013`
+## 🛠 Build Instructions
 
 ### Windows
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Visual Studio 2022** with "Desktop development with C++"
+*   **Python 3.13** or later
 
-Requirements:
- - Source SDK 2013 Multiplayer installed via Steam
- - Visual Studio 2022 with the following workload and components:
-   - Desktop development with C++:
-     - MSVC v143 - VS 2022 C++ x64/x86 build tools (Latest)
-     - Windows 11 SDK (10.0.22621.0) or Windows 10 SDK (10.0.19041.1)
- - Python 3.13 or later
-
-Inside the cloned directory, navigate to `src`, run:
-```bat
-createallprojects.bat
-```
-This will generate the Visual Studio project `everything.sln` which will be used to build your mod.
-
-Then, on the menu bar, go to `Build > Build Solution`, and wait for everything to build.
-
-You can then select the `Client (Mod Name)` project you wish to run, right click and select `Set as Startup Project` and hit the big green `> Local Windows Debugger` button on the tool bar in order to launch your mod.
-
-The default launch options should be already filled in for the `Release` configuration.
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `createallprojects.bat` to generate `everything.sln`.
+3.  Open the solution in Visual Studio and use **Build > Build Solution**.
 
 ### Linux
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Podman** (for containerized builds)
 
-Requirements:
- - Source SDK 2013 Multiplayer installed via Steam
- - podman
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `./buildallprojects` to compile against the Steam Runtime.
 
-Inside the cloned directory, navigate to `src`, run:
-```bash
-./buildallprojects
-```
+---
 
-This will build all the projects related to the SDK and your mods automatically against the Steam Runtime.
+## 🗺 Roadmap & Future Plans
 
-You can then, in the root of the cloned directory, you can navigate to `game` and run your mod by launching the build launcher for your mod project, eg:
-```bash
-./mod_tf
-```
+We are actively working on modernizing the engine core. Our current development focus includes:
 
-*Mods that are distributed on Steam MUST be built against the Steam Runtime, which the above steps will automatically do for you.*
+### 🟢 Core Architecture
+- [ ] **x64 Architecture:** Full migration to 64-bit for improved memory addressing and performance.
+- [ ] **Jolt Physics Integration:** Replacing the legacy Havok physics engine with **Jolt Physics** for better multithreading and stability.
 
-## Distributing your Mod
+### 🟡 Graphics & UI
+- [ ] **Panorama UI:** Implementing the Panorama framework to replace legacy VGUI for modern, web-based UI development.
+- [ ] **Shader Overhaul:** Significant improvements to the rendering pipeline and shader system.
 
-There is guidance on distributing your mod both on and off Steam available at the following link:
+### 🔵 Scripting & Extensibility
+- [ ] **Lua Integration:** Embedding Lua support for flexible, high-level game logic and modding.
+- [ ] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
 
-https://partner.steamgames.com/doc/sdk/uploading/distributing_source_engine
+---
 
-## Additional Resources
+## 📜 License & Distribution
 
-- [Valve Developer Wiki](https://developer.valvesoftware.com/wiki/Source_SDK_2013)
+This project is licensed under the same terms as the original Valve Source SDK. When distributing your mod:
+*   Ensure compliance with the [Steam Distribution Guidelines](https://steamgames.com).
+*   Mods distributed on Steam **must** be built against the Steam Runtime.
 
-## License
+---
+*Maintained by the Cold Source Team.*
 
-The SDK is licensed to users on a non-commercial basis under the [SOURCE 1 SDK LICENSE](LICENSE), which is contained in the [LICENSE](LICENSE) file in the root of the repository.
-
-For more information, see [Distributing your Mod](#markdown-header-distributing-your-mod).
