@@ -14,8 +14,8 @@ Currently contains updated game code for:
 
 ### Windows
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
-*   **Visual Studio 2022** with "Desktop development with C++"
+*   Source SDK 2013 Singlplayer (installed via Steam)
+*   **Visual Studio 2013** with "Desktop development with C++"
 *   **Python 3.13** or later
 
 **Setup:**
@@ -25,7 +25,7 @@ Currently contains updated game code for:
 
 ### Linux
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
+*   Source SDK 2013 Singlplayer (installed via Steam)
 *   **Podman** (for containerized builds)
 
 **Setup:**
