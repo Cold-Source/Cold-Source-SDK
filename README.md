@@ -1,47 +1,120 @@
-<p align="center">
-  <img src=".assets/sdk2013ce.png" width="200" height="200">
-</p>
+# Cold Source SDK
+-- This Branches Cold Source has lua and GamePadUI
 
-</div>
+The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
 
+Currently contains updated game code for:
+*   **Source SP**
+*   **Source MP**
 
-# Source SDK 2013 Community Edition
+---
 
-**lua Branch is experimental and currently only on SP**
+## 🛠 Build Instructions
 
-Source 2013 CE is a clean fork of Valve's [Source SDK 2013 repo](https://github.com/valveSoftware/source-sdk-2013) 
-with the goal of fixing up the SDK and to provide a clean bloat-free codebase that works out of the box to make developers' lives easier.
+### Windows
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Visual Studio 2022** with "Desktop development with C++"
+*   **Python 3.13** or later
 
-you can find a pre-compiled mod template with the lua base files at [https://github.com/AnthonyPython/CE_SP_lua_mod](https://github.com/AnthonyPython/CE_SP_lua_mod)
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `createallprojects.bat` to generate `everything.sln`.
+3.  Open the solution in Visual Studio and use **Build > Build Solution**.
 
-# Info
-There are currently two branches, the first one being `master` which will only contain fixes without any extra additions.</br>
-The second one is `Experimental` which is the branch we use to add new features and helpful tools for developers.</br>
-And a third branch `enhancements` soon to appear, which will include some neat features that we think you will enjoy, 
-some made by the community, some backported from other engine branches such as Alien Swarm, and everything in-between.
+### Linux
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Podman** (for containerized builds)
 
-You can find Source 2013 CE's roadmap by going to our [Trello board](https://trello.com/b/MOxQ2iai/source-sdk-2013-community-edition).
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `./buildallprojects` to compile against the Steam Runtime.
 
-And you can also give us suggestions for fixes and features that you'd like to see in our Discord channel (`#source-SDK-2013-ce`) found in the 
-Source Modding Community server, which you can join [here](https://discord.gg/BD6WpY5).
+---
 
-# Requirements 
-To be able to use Source 2013 CE you will need to download **Visual Studio 2022** and install:
-* MSVC v143 - VS 2022 C++ x64/x86 build tools
-* C++ MFC Library for latest v143 build tools (x86 and x64)
-* Windows 11 SDK (10.0.22000.0)
+## 🗺 Roadmap & Future Plans
 
-As of July 2023, CE has been tested on Visual Studio 2022 with the latest versions of the requirements listed above. So if desired you can use that instead.
+We are actively working on modernizing the engine core. Our current development focus includes:
 
-# Contributing
-We appreciate any form of help so ideally if you want to help this project out the best way would be to make a pull request.
+### 🟢 Core Architecture
+- [ ] **x64 Architecture:** Full migration to 64-bit for improved memory addressing and performance.
+- [ ] **Jolt Physics Integration:** Replacing the legacy Havok physics engine with **Jolt Physics** for better multithreading and stability.
 
-# Ending Notes
-Thank you for trying out this project we hope we will help you out with your Source engine troubles!
+### 🟡 Graphics & UI
+- [ ] **Panorama UI:** Implementing the Panorama framework to replace legacy VGUI for modern, web-based UI development.
+- [ ] **Shader Overhaul:** Significant improvements to the rendering pipeline and shader system.
 
-Made with :heart: by [@Nbc66](https://github.com/Nbc66) & [@GamerDude27](https://github.com/GamerDude27)
+### 🔵 Scripting & Extensibility
+- [ ] **Lua Integration:** Embedding Lua support for flexible, high-level game logic and modding.
+- [ ] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
 
-Credits for 2019 support: momentum mod, Brae, and Anthonypython
-Credits for CI: TF2Vintage, Deathreus, Dio, Anthonypython
-Credits for original lua implementation hl2sb/ Team Sandbox
-Credits for porting and fixing lua implementation by Anthonypython
+---
+
+## 📜 License & Distribution
+
+This project is licensed under the same terms as the original Valve Source SDK. When distributing your mod:
+*   Ensure compliance with the [Steam Distribution Guidelines](https://steamgames.com).
+*   Mods distributed on Steam **must** be built against the Steam Runtime.
+
+---
+*Maintained by the Cold Source Team.*# Cold Source SDK
+
+The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
+
+Currently contains updated game code for:
+*   **Half-Life 2**
+*   **Half-Life 2: Deathmatch**
+
+---
+
+## 🛠 Build Instructions
+
+### Windows
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Visual Studio 2022** with "Desktop development with C++"
+*   **Python 3.13** or later
+
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `createallprojects.bat` to generate `everything.sln`.
+3.  Open the solution in Visual Studio and use **Build > Build Solution**.
+
+### Linux
+**Requirements:**
+*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Podman** (for containerized builds)
+
+**Setup:**
+1.  Navigate to the `src` directory.
+2.  Run `./buildallprojects` to compile against the Steam Runtime.
+
+---
+
+## 🗺 Roadmap & Future Plans
+
+We are actively working on modernizing the engine core. Our current development focus includes:
+
+### 🟢 Core Architecture
+- [ ] **x64 Architecture:** Full migration to 64-bit for improved memory addressing and performance.
+- [ ] **Jolt Physics Integration:** Replacing the legacy Havok physics engine with **Jolt Physics** for better multithreading and stability.
+
+### 🟡 Graphics & UI
+- [ ] **Panorama UI:** Implementing the Panorama framework to replace legacy VGUI for modern, web-based UI development.
+- [ ] **Shader Overhaul:** Significant improvements to the rendering pipeline and shader system.
+
+### 🔵 Scripting & Extensibility
+- [ ] **Lua Integration:** Embedding Lua support for flexible, high-level game logic and modding.
+- [ ] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
+
+---
+
+## 📜 License & Distribution
+
+This project is licensed under the same terms as the original Valve Source SDK. When distributing your mod:
+*   Ensure compliance with the [Steam Distribution Guidelines](https://steamgames.com).
+*   Mods distributed on Steam **must** be built against the Steam Runtime.
+
+---
+*Maintained by the Cold Source Team.*
