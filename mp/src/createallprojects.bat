@@ -1,1 +1,1 @@
-devtools\bin\vpc.exe /2022 /sdk2013ce +everything /mksln Everything.sln
+devtools\bin\vpc.exe /sdk2013ce +everything /mksln Everything.sln
