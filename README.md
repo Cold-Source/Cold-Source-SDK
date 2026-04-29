@@ -1,6 +1,7 @@
 # Cold Source SDK
-## This Cold Source branch has Lua and GamePadUI✅
-
+### This branch of Cold Source has Lua and GamePadUI✅
+### [Cold Source Files Lua and GamepadUI](https://github.com/Cold-Source/Cold-Source-Game)
+## Currently, the multiplayer version does not support Lua, including gamepadui, but we will try to implement Lua and gamepadui in the multiplayer version as soon as possible.
 The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
 
 Currently contains updated game code for:
