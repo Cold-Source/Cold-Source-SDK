@@ -1,10 +1,9 @@
 # Cold Source SDK
-
 The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
-
+### This branch of Cold Source has GamePadUI✅
+### [Files GamepadUI](https://github.com/Cold-Source/Cold-Source-Game/tree/gamepadui)
 Currently contains updated game code for:
-*   **Half-Life 2**
-*   **Half-Life 2: Deathmatch**
+*   **Source SP**
 
 ---
 
@@ -12,8 +11,8 @@ Currently contains updated game code for:
 
 ### Windows
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
-*   **Visual Studio 2022** with "Desktop development with C++"
+*   **Source Singlplayer Game** or **Source SDK 2013 Singlplayer**
+*   **Visual Studio 2013** with "Desktop development with C++"
 *   **Python 3.13** or later
 
 **Setup:**
@@ -23,7 +22,7 @@ Currently contains updated game code for:
 
 ### Linux
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Source Singlplayer Game** or **Source SDK 2013 Singlplayer**
 *   **Podman** (for containerized builds)
 
 **Setup:**
@@ -41,11 +40,13 @@ We are actively working on modernizing the engine core. Our current development 
 - [ ] **Jolt Physics Integration:** Replacing the legacy Havok physics engine with **Jolt Physics** for better multithreading and stability.
 
 ### 🟡 Graphics & UI
-- [ ] **Panorama UI:** Implementing the Panorama framework to replace legacy VGUI for modern, web-based UI development.
+- [ ] **Panorama UI** — `IN PROGRESS (50%)`
+  > Implementing the Panorama framework to replace legacy VGUI components.
 - [ ] **Shader Overhaul:** Significant improvements to the rendering pipeline and shader system.
 
 ### 🔵 Scripting & Extensibility
-- [ ] **Lua Integration:** Embedding Lua support for flexible, high-level game logic and modding.
+- [x] **Lua Integration:** — [branches with Lua](https://github.com/Cold-Source/Cold-Source-SDK/tree/Lua)
+  > Embedding Lua support for flexible, high-level game logic and modding.
 - [ ] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
 
 ---
