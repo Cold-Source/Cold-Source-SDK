@@ -3,8 +3,8 @@
 The foundational source code for the **Cold Source** development environment. This SDK is a modernized branch of the Source Engine, providing the framework for advanced community projects.
 
 Currently contains updated game code for:
-*   **Half-Life 2**
-*   **Half-Life 2: Deathmatch**
+*   **Source HL2 MP**
+*   **Source TF2 MP**
 
 ---
 
@@ -12,8 +12,8 @@ Currently contains updated game code for:
 
 ### Windows
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
-*   **Visual Studio 2022** with "Desktop development with C++"
+*   **Source Multiplayer Game** or **Source SDK 2013 Multiplayer**
+*   **Visual Studio 2022 or Visual Studio 2026** with "Desktop development with C++"
 *   **Python 3.13** or later
 
 **Setup:**
@@ -23,7 +23,7 @@ Currently contains updated game code for:
 
 ### Linux
 **Requirements:**
-*   Source SDK 2013 Multiplayer (installed via Steam)
+*   **Source Multiplayer Game** or **Source SDK 2013 Multiplayer**
 *   **Podman** (for containerized builds)
 
 **Setup:**
@@ -37,7 +37,7 @@ Currently contains updated game code for:
 We are actively working on modernizing the engine core. Our current development focus includes:
 
 ### 🟢 Core Architecture
-- [ ] **x64 Architecture:** Full migration to 64-bit for improved memory addressing and performance.
+- [x] **x64 Architecture:** Full migration to 64-bit for improved memory addressing and performance.
 - [ ] **Jolt Physics Integration:** Replacing the legacy Havok physics engine with **Jolt Physics** for better multithreading and stability.
 
 ### 🟡 Graphics & UI
@@ -45,8 +45,9 @@ We are actively working on modernizing the engine core. Our current development 
 - [ ] **Shader Overhaul:** Significant improvements to the rendering pipeline and shader system.
 
 ### 🔵 Scripting & Extensibility
-- [ ] **Lua Integration:** Embedding Lua support for flexible, high-level game logic and modding.
-- [ ] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
+- [x] **Lua Integration:** — [branches with Lua](https://github.com/Cold-Source/Cold-Source-SDK/tree/Lua)
+  > Embedding Lua support for flexible, high-level game logic and modding.
+- [x] **Modern Tooling:** Ensuring full compatibility with Visual Studio 2022 and modern C++ standards.
 
 ---
 
@@ -57,5 +58,5 @@ This project is licensed under the same terms as the original Valve Source SDK. 
 *   Mods distributed on Steam **must** be built against the Steam Runtime.
 
 ---
-*Maintained by the Cold Source Team.*
+* by Cold Source organization.*
 
