@@ -20,6 +20,11 @@ $Project "client"
 	"game\client\client_sdk2013ce.vpc"	[($WIN32||$X360||$POSIX) && $SDK2013CE]
 }
 
+$Project "launcher"
+{
+	"launcher_main\launcher_main_mod_hl2sp.vpc" [$HL2 || $SDK2013CE]
+}
+
 $Project "gamepadui"
 {
     "game\gamepadui\gamepadui_hl2.vpc"      [$HL2 || $SDK2013CE]
