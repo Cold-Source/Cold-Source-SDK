@@ -24,6 +24,7 @@ ipch
 *.mak
 *.mak.vpc_crc
 *.xcodeproj/
+.vs/
 obj*/
 !devtools/*.mak
 !utils/smdlexp/smdlexp.mak
