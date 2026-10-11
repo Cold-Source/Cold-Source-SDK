@@ -278,10 +278,17 @@ extern "C"
         return pMemOut;
     }
 
-    size_t _msize_base(void* pMem)noexcept
+#if _MSC_VER < 1900
+    size_t __cdecl _msize_base(void* pMem)
     {
         return g_pMemAlloc->GetSize(pMem);
     }
+#else
+    size_t _msize_base(void* pMem) noexcept
+    {
+        return g_pMemAlloc->GetSize(pMem);
+    }
+#endif
 
     size_t _msize(void* pMem)
     {
@@ -1182,6 +1189,7 @@ extern "C"
 
     //===========================================
     // NEW!!! 64-bit
+#if _MSC_VER < 1900
 #ifndef PROTECTED_THINGS_DISABLE
     char* __cdecl _strdup(const char* string)
     {
@@ -1194,6 +1202,7 @@ extern "C"
             memcpy(pCopy, string, nSize);
         return pCopy;
     }
+#endif
 #endif
 
 #if 0
@@ -1389,7 +1398,7 @@ struct _tiddata {
 #ifdef _M_IX86
     void* _reserved4;     /* nothing */
     void* _reserved5;     /* nothing */
-#endif  /* _M_IX86 */
+#endif  /* defined (_M_IX86) */
 
     int _cxxReThrow;        /* Set to True if it's a rethrown C++ Exception */
 
