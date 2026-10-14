@@ -4,7 +4,7 @@ The foundational source code for the **Cold Source** development environment. Th
 
 Currently contains updated game code for:
 *   **Source HL2 MP**
-*   **Source TF2 MP**
+*   **Source HL2 SP**
 
 ---
 
