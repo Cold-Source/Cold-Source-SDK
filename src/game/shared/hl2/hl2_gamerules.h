@@ -32,6 +32,8 @@ class CHalfLife2 : public CSingleplayRules
 {
 public:
 	DECLARE_CLASS( CHalfLife2, CSingleplayRules );
+	virtual bool IsMultiplayer( void );
+	virtual bool IsCoOp( void );
 
 	// Damage Query Overrides.
 	virtual bool			Damage_IsTimeBased( int iDmgType );

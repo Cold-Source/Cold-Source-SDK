@@ -22,6 +22,7 @@ class CPhysCollide;
 
 ISaveRestoreBlockHandler *GetPhysSaveRestoreBlockHandler();
 ISaveRestoreOps *GetPhysObjSaveRestoreOps( PhysInterfaceId_t );
+void PhysDeferDestroyAfterRestore( IPhysicsObject *pObject );
 
 //-------------------------------------
 

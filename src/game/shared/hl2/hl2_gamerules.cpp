@@ -30,6 +30,10 @@
 
 REGISTER_GAMERULES_CLASS( CHalfLife2 );
 
+ConVar spmp_coop( "spmp_coop", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Enable cooperative HL2 campaign rules." );
+bool CHalfLife2::IsMultiplayer( void ) { return spmp_coop.GetBool(); }
+bool CHalfLife2::IsCoOp( void ) { return spmp_coop.GetBool(); }
+
 BEGIN_NETWORK_TABLE_NOBASE( CHalfLife2, DT_HL2GameRules )
 	#ifdef CLIENT_DLL
 		RecvPropBool( RECVINFO( m_bMegaPhysgun ) ),

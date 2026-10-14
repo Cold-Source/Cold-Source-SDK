@@ -18,6 +18,9 @@
 
 #if !defined( CLIENT_DLL )
 #include "entitylist.h"
+#if defined(PLATFORM_64BITS) && defined(HL2_DLL) && !defined(HL2MP)
+#include "vehicle_base.h"
+#endif
 #endif
 
 // memdbgon must be the last include file in a .cpp file!!!
@@ -25,7 +28,19 @@
 
 //-----------------------------------------------------------------------------
 
+static CUtlVector<IPhysicsObject *> s_PhysicsObjectsToDestroyAfterRestore;
+
+void PhysDeferDestroyAfterRestore( IPhysicsObject *pObject )
+{
+	if ( pObject && s_PhysicsObjectsToDestroyAfterRestore.Find(pObject) == s_PhysicsObjectsToDestroyAfterRestore.InvalidIndex() )
+		s_PhysicsObjectsToDestroyAfterRestore.AddToTail(pObject);
+}
+
+#ifdef PLATFORM_64BITS
+static short PHYS_SAVE_RESTORE_VERSION = 6;
+#else
 static short PHYS_SAVE_RESTORE_VERSION = 5;
+#endif
 
 struct PhysBlockHeader_t
 {
@@ -42,8 +57,12 @@ struct PhysBlockHeader_t
 };
 BEGIN_SIMPLE_DATADESC( PhysBlockHeader_t )
 	DEFINE_FIELD( nSaved,	FIELD_INTEGER ),
-	// NOTE: We want to save the actual address here for remapping, so use an integer
-	DEFINE_FIELD( pWorldObject, FIELD_INTEGER ),	
+	// This is a remapping key, not an entity pointer. Preserve every address bit.
+#ifdef PLATFORM_64BITS
+	DEFINE_ARRAY( pWorldObject, FIELD_CHARACTER, sizeof(IPhysicsObject *) ),
+#else
+	DEFINE_FIELD( pWorldObject, FIELD_INTEGER ),
+#endif
 END_DATADESC()
 
 #if defined(_STATIC_LINKED) && defined(CLIENT_DLL)
@@ -199,6 +218,7 @@ public:
 
 	virtual void PreRestore() 
 	{
+		s_PhysicsObjectsToDestroyAfterRestore.Purge();
 #if !defined( CLIENT_DLL )
 		gEntList.AddListenerEntity( this );
 #endif
@@ -401,6 +421,13 @@ public:
 		if ( physenv )
 			physenv->PostRestore();
 
+		FOR_EACH_VEC( s_PhysicsObjectsToDestroyAfterRestore, objectIndex )
+		{
+			if ( physenv )
+				physenv->DestroyObject( s_PhysicsObjectsToDestroyAfterRestore[objectIndex] );
+		}
+		s_PhysicsObjectsToDestroyAfterRestore.Purge();
+
 		unsigned short i = m_QueuedRestores.FirstInorder();
 		while ( i != m_QueuedRestores.InvalidIndex() )
 		{
@@ -514,6 +541,21 @@ public:
 	{
 		if ( physenv )
 		{
+			DevMsg( "Physics restore: %s::%s, type %d, model %s\n", header.hEntity->GetClassname(), STRING(header.fieldName), header.type, STRING(header.modelName) );
+#if defined(PLATFORM_64BITS) && defined(HL2_DLL) && !defined(HL2MP) && !defined(CLIENT_DLL)
+			if ( header.type == PIID_IPHYSICSVEHICLECONTROLLER )
+			{
+				CPropVehicle *pVehicle = dynamic_cast<CPropVehicle *>( header.hEntity.Get() );
+				if ( pVehicle )
+				{
+					if ( !pVehicle->RebuildPhysicsControllerAfterRestore() )
+						Error( "Failed to rebuild physics controller for %s while loading a save.\n", pVehicle->GetClassname() );
+					*ppObject = pVehicle->GetPhysics()->GetVehicleController();
+					DevMsg( "Rebuilt x64 vehicle controller: %s\n", pVehicle->GetClassname() );
+					return;
+				}
+			}
+#endif
 			physrestoreparams_t params = { pRestore, ppObject, header.type, header.hEntity.Get(), STRING(header.modelName), pCollide, physenv, physgametrace };
 			physenv->Restore( params );
 		}

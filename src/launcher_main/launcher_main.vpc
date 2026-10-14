@@ -22,8 +22,8 @@ $Configuration	"Debug"
 {
 	$General
 	{
-		$OutputDirectory			".\Debug_$OUTBINNAME" [$WINDOWS]
-		$IntermediateDirectory		".\Debug_$OUTBINNAME" [$WINDOWS]
+		$OutputDirectory			".\Debug_$OUTBINNAME$PLATSUBDIR\$BUILD_YEAR" [$WINDOWS]
+		$IntermediateDirectory		".\Debug_$OUTBINNAME$PLATSUBDIR\$BUILD_YEAR" [$WINDOWS]
 	}
 }
 
@@ -32,8 +32,8 @@ $Configuration	"Release"
 	$General
 	{
 		// Windows generator doesn't sandbox these directories per configuration but others do :-/
-		$OutputDirectory			".\Release_$OUTBINNAME" [$WINDOWS]
-		$IntermediateDirectory		".\Release_$OUTBINNAME" [$WINDOWS]
+		$OutputDirectory			".\Release_$OUTBINNAME$PLATSUBDIR\$BUILD_YEAR" [$WINDOWS]
+		$IntermediateDirectory		".\Release_$OUTBINNAME$PLATSUBDIR\$BUILD_YEAR" [$WINDOWS]
 	}
 }
 

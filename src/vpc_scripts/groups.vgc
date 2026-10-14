@@ -10,12 +10,14 @@
 
 $Group "gamedlls"
 {
+	"gamepadui"
 	"client"
 	"server"
 }
 
 $Group "game"
 {
+    "gamepadui"
 	"client"
 	"launcher_main"
 	"mathlib"
@@ -34,6 +36,7 @@ $Group "shaders"
 
 $Group "everything"
 {
+    "gamepadui"
 	"captioncompiler"
 	"client"
 	"fgdlib"
@@ -72,5 +75,25 @@ $Group "dedicated"
 	"mathlib"
 	"server"
 	"tier1"
+}
+
+$Group "tools"
+{
+	"captioncompiler"
+	"fgdlib"
+	"glview"
+	"height2normal"
+	"motionmapper"
+	"phonemeextractor"
+	"qc_eyes"
+	"tgadiff"
+	"vbsp"
+	"vice"
+	"vrad_dll"
+	"vrad_launcher"
+	"vtf2tga"
+	"vtfdiff"
+	"vvis_dll"
+	"vvis_launcher"
 }
 

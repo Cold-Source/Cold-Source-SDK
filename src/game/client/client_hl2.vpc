@@ -16,7 +16,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories	".\hl2;.\hl2\elements;$SRCDIR\game\shared\hl2;$BASE"
-		$PreprocessorDefinitions		"$BASE;HL2_CLIENT_DLL"
+		$PreprocessorDefinitions		"$BASE;HL2_CLIENT_DLL;GAMEPADUI"
 	}
 }
 
@@ -111,7 +111,7 @@ $Project "Client (HL2)"
 			$File	"hl2\hud_zoom.cpp"
 			$File	"hl2\shieldproxy.cpp"
 			$File	"hl2\vgui_rootpanel_hl2.cpp"
-			$File 	"episodic\c_vort_charge_token.cpp"
+			$File 	"hl2\c_vort_charge_token.cpp"
 		}
 	}
 }

@@ -10785,7 +10785,11 @@ BEGIN_SIMPLE_DATADESC( AIScheduleState_t )
 	DEFINE_FIELD( fTaskStatus,			FIELD_INTEGER ),
 	DEFINE_FIELD( timeStarted,			FIELD_TIME ),
 	DEFINE_FIELD( timeCurTaskStarted,	FIELD_TIME ),
+#ifdef PLATFORM_64BITS
+	DEFINE_ARRAY( taskFailureCode, FIELD_CHARACTER, sizeof(AI_TaskFailureCode_t) ),
+#else
 	DEFINE_FIELD( taskFailureCode,		FIELD_INTEGER ),
+#endif
 	DEFINE_FIELD( iTaskInterrupt,		FIELD_INTEGER ),
 	DEFINE_FIELD( bTaskRanAutomovement,	FIELD_BOOLEAN ),
 	DEFINE_FIELD( bTaskUpdatedYaw,		FIELD_BOOLEAN ),

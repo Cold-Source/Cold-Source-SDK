@@ -43,6 +43,9 @@ public:
 	
 	// Initializes the vehicle physics so we can drive it
 	bool Initialize( const char *pScriptName, unsigned int nVehicleType );
+	bool RebuildControllerAfterRestore( const char *pScriptName, unsigned int nVehicleType );
+	void CaptureControllerStateForSave();
+	void ShutdownController();
 
 	void Teleport( matrix3x4_t& relativeTransform );
 	bool VPhysicsUpdate( IPhysicsObject *pPhysics );
@@ -162,6 +165,7 @@ private:
 
 	float				m_flVehicleVolume;		// NPC driven vehicles used louder sounds
 	bool				m_bIsOn;
+	bool                m_bEngineDisabled;
 	bool				m_bLastThrottle;
 	bool				m_bLastBoost;
 	bool				m_bLastSkid;

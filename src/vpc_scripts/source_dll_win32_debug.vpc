@@ -169,7 +169,7 @@ $Configuration "Debug"
 
 		// Debugging
 		$GenerateDebugInfo					"Generate Debug Information optimized for sharing and publishing (/DEBUG:FULL)"
-		$GenerateProgramDatabaseFile		"$(IntDir)/$(TargetName).pdb"
+		$GenerateProgramDatabaseFile		"$(OutDir)$(TargetName).pdb"
 		$StripPrivateSymbols
 		$MapExports
 		$DebuggableAssembly

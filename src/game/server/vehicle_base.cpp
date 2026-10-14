@@ -129,6 +129,55 @@ int CPropVehicle::Restore( IRestore &restore )
 	return BaseClass::Restore( restore );
 }
 
+bool CPropVehicle::RebuildPhysicsControllerAfterRestore()
+{
+	return m_VehiclePhysics.RebuildControllerAfterRestore( STRING(m_vehicleScript), m_nVehicleType );
+}
+
+void CPropVehicle::OnSave( IEntitySaveUtils *pSaveUtils )
+{
+	BaseClass::OnSave( pSaveUtils );
+	m_VehiclePhysics.CaptureControllerStateForSave();
+}
+
+CON_COMMAND_F( spmp_vehicle_enter, "Enter the first drivable vehicle for save/restore diagnostics.", FCVAR_CHEAT )
+{
+	CBasePlayer *pPlayer = UTIL_GetCommandClient();
+	if ( !pPlayer && gpGlobals->maxClients == 1 )
+		pPlayer = UTIL_GetLocalPlayer();
+	if ( !pPlayer )
+		return;
+	for ( CBaseEntity *pEntity = gEntList.FirstEnt(); pEntity; pEntity = gEntList.NextEnt(pEntity) )
+	{
+		CPropVehicleDriveable *pVehicle = dynamic_cast<CPropVehicleDriveable *>(pEntity);
+		if ( pVehicle && pVehicle->GetServerVehicle() && pPlayer->GetInVehicle(pVehicle->GetServerVehicle(), VEHICLE_ROLE_DRIVER) )
+		{
+			Msg("SPMP_VEHICLE_ENTER driver %d\n", pPlayer->entindex());
+			return;
+		}
+	}
+}
+
+CON_COMMAND_F( spmp_vehicle_state, "Print vehicle physics state for save/restore diagnostics.", FCVAR_CHEAT )
+{
+	for ( CBaseEntity *pEntity = gEntList.FirstEnt(); pEntity; pEntity = gEntList.NextEnt(pEntity) )
+	{
+		CPropVehicle *pVehicle = dynamic_cast<CPropVehicle *>(pEntity);
+		if ( !pVehicle || !pVehicle->VPhysicsGetObject() )
+			continue;
+		Vector position, velocity;
+		QAngle angles;
+		pVehicle->VPhysicsGetObject()->GetPosition(&position, &angles);
+		pVehicle->VPhysicsGetObject()->GetVelocity(&velocity, NULL);
+		CPropVehicleDriveable *pDriveable = dynamic_cast<CPropVehicleDriveable *>(pVehicle);
+		CBaseEntity *pDriver = pDriveable ? pDriveable->GetDriver() : NULL;
+		Msg("SPMP_VEHICLE %s position %.3f %.3f %.3f velocity %.3f %.3f %.3f driver %d controller %d engine_disabled %d\n",
+			pVehicle->GetClassname(), position.x, position.y, position.z, velocity.x, velocity.y, velocity.z,
+			pDriver ? pDriver->entindex() : 0, pVehicle->GetPhysics()->GetVehicleController() != NULL,
+			pVehicle->GetPhysics()->GetVehicleController() ? pVehicle->GetPhysics()->IsEngineDisabled() : 0);
+	}
+}
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Tell the vehicle physics system whenever we teleport, so it can fixup the wheels.

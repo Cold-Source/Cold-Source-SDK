@@ -146,6 +146,11 @@ void respawn( CBaseEntity *pEdict, bool fCopyCorpse )
 void GameStartFrame( void )
 {
 	VPROF("GameStartFrame()");
+	if ( g_pGameRules && g_pGameRules->IsCoOp() )
+	{
+		gpGlobals->coop = true;
+		gpGlobals->deathmatch = false;
+	}
 	if ( g_fGameOver )
 		return;
 

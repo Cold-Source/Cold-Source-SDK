@@ -580,6 +580,9 @@ CBasePlayer	*UTIL_PlayerByIndex( int playerIndex )
 // 
 CBasePlayer *UTIL_GetLocalPlayer( void )
 {
+	// SP story scripts retain a campaign actor on a cooperative listen server.
+	if ( g_pGameRules && g_pGameRules->IsCoOp() && !engine->IsDedicatedServer() )
+		return UTIL_PlayerByIndex(1);
 	if ( gpGlobals->maxClients > 1 )
 	{
 		if ( developer.GetBool() )

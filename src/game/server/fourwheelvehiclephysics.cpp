@@ -143,6 +143,7 @@ BEGIN_DATADESC_NO_BASE( CFourWheelVehiclePhysics )
 
 	DEFINE_FIELD( m_flVehicleVolume, FIELD_FLOAT ),
 	DEFINE_FIELD( m_bIsOn, FIELD_BOOLEAN ),
+	DEFINE_FIELD( m_bEngineDisabled, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_bLastThrottle, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_bLastBoost, FIELD_BOOLEAN ),
 	DEFINE_FIELD( m_bLastSkid, FIELD_BOOLEAN ),
@@ -154,6 +155,8 @@ END_DATADESC()
 //-----------------------------------------------------------------------------
 CFourWheelVehiclePhysics::CFourWheelVehiclePhysics( CBaseAnimating *pOuter )
 {
+	m_pVehicle = NULL;
+	m_bEngineDisabled = false;
 	m_flVehicleVolume = 0.5;
 	m_pOuter = NULL;
 	m_pOuterServerVehicle = NULL;
@@ -165,7 +168,13 @@ CFourWheelVehiclePhysics::CFourWheelVehiclePhysics( CBaseAnimating *pOuter )
 //-----------------------------------------------------------------------------
 CFourWheelVehiclePhysics::~CFourWheelVehiclePhysics ()
 {
-	physenv->DestroyVehicleController( m_pVehicle );
+	ShutdownController();
+}
+
+void CFourWheelVehiclePhysics::ShutdownController()
+{
+	if ( m_pVehicle && physenv ) physenv->DestroyVehicleController( m_pVehicle );
+	m_pVehicle = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -410,6 +419,69 @@ bool CFourWheelVehiclePhysics::Initialize( const char *pVehicleScript, unsigned 
 	return true;
 }
 
+
+//-----------------------------------------------------------------------------
+// Rebind a fresh controller to the restored chassis (Valve SDK issue #629).
+bool CFourWheelVehiclePhysics::RebuildControllerAfterRestore( const char *pScriptName, unsigned int nVehicleType )
+{
+	if ( m_pVehicle )
+		return true;
+	if ( !m_pOuter || !m_pOuter->VPhysicsGetObject() )
+		return false;
+
+	solid_t solid;
+	vehicleparams_t vehicle;
+	if ( !ParseVehicleScript( pScriptName, solid, vehicle ) )
+		return false;
+
+	IPhysicsObject *pBody = m_pOuter->VPhysicsGetObject();
+	Vector bodyVelocity;
+	AngularImpulse bodyAngularVelocity;
+	pBody->GetVelocity( &bodyVelocity, &bodyAngularVelocity );
+
+	IPhysicsObject *oldWheels[4] = {};
+	Vector wheelPosition[4], wheelVelocity[4];
+	QAngle wheelAngles[4];
+	AngularImpulse wheelAngularVelocity[4];
+	const int oldWheelCount = MIN( m_wheelCount, ARRAYSIZE(oldWheels) );
+	for ( int i = 0; i < oldWheelCount; ++i )
+	{
+		oldWheels[i] = m_pWheels[i];
+		if ( oldWheels[i] )
+		{
+			oldWheels[i]->GetPosition( &wheelPosition[i], &wheelAngles[i] );
+			oldWheels[i]->GetVelocity( &wheelVelocity[i], &wheelAngularVelocity[i] );
+		}
+	}
+
+	m_pVehicle = physenv->CreateVehicleController( pBody, vehicle, nVehicleType, physgametrace );
+	if ( !m_pVehicle )
+		return false;
+
+	m_wheelCount = m_pVehicle->GetWheelCount();
+	for ( int i = 0; i < ARRAYSIZE(m_pWheels); ++i )
+	{
+		m_pWheels[i] = i < m_wheelCount ? m_pVehicle->GetWheel(i) : NULL;
+		if ( i < oldWheelCount && oldWheels[i] )
+		{
+			if ( m_pWheels[i] )
+			{
+				m_pWheels[i]->SetPosition( wheelPosition[i], wheelAngles[i], true );
+				m_pWheels[i]->SetVelocity( &wheelVelocity[i], &wheelAngularVelocity[i] );
+			}
+			PhysDeferDestroyAfterRestore( oldWheels[i] );
+		}
+	}
+	pBody->SetVelocity( &bodyVelocity, &bodyAngularVelocity );
+	m_pVehicle->SetEngineDisabled( m_bEngineDisabled );
+	return true;
+}
+
+void CFourWheelVehiclePhysics::CaptureControllerStateForSave()
+{
+	if ( m_pVehicle )
+		m_bEngineDisabled = m_pVehicle->IsEngineDisabled();
+}
 
 //-----------------------------------------------------------------------------
 // Various steering parameters
@@ -1419,6 +1491,7 @@ bool CFourWheelVehiclePhysics::IsBoosting( void )
 //-----------------------------------------------------------------------------
 void CFourWheelVehiclePhysics::SetDisableEngine( bool bDisable )
 {
+	m_bEngineDisabled = bDisable;
 	// Set the engine state.
 	m_pVehicle->SetEngineDisabled( bDisable );
 }

@@ -29,6 +29,11 @@
 
 #include "globalstate.h"
 #include "entitylist.h"
+#if defined(HL2_DLL) && !defined(HL2MP)
+#include "world.h"
+#include "hl2/spmp_saveload.h"
+#include "tier0/memalloc.h"
+#endif
 
 #else
 
@@ -48,6 +53,29 @@ void AddRestoredEntity( C_BaseEntity *pEntity );
 #include "tier0/memdbgon.h"
 
 #define MAX_ENTITYARRAY 1024
+// Native save allocation is only available inside the engine's save session.
+// SPMP snapshots own their memory independently of that session.
+static void *SaveRestoreAllocMemory( size_t count, size_t elementSize )
+{
+#if !defined(CLIENT_DLL) && defined(HL2_DLL) && !defined(HL2MP)
+	if ( SpmpUsesOwnSaveMemory() )
+	{
+		if ( elementSize && count > ((size_t)-1) / elementSize ) return NULL;
+		const size_t bytes = count * elementSize;
+		void *memory = MemAlloc_Alloc(bytes);
+		if ( memory ) memset(memory, 0, bytes);
+		return memory;
+	}
+#endif
+	return engine->SaveAllocMemory(count, elementSize);
+}
+static void SaveRestoreFreeMemory( void *memory )
+{
+#if !defined(CLIENT_DLL) && defined(HL2_DLL) && !defined(HL2MP)
+	if ( SpmpUsesOwnSaveMemory() ) { MemAlloc_Free(memory); return; }
+#endif
+	engine->SaveFreeMemory(memory);
+}
 #define ZERO_TIME ((FLT_MAX*-0.5))
 // A bit arbitrary, but unlikely to collide with any saved games...
 #define TICK_NEVER_THINK_ENCODE	( INT_MAX - 3 )
@@ -2532,7 +2560,7 @@ void CEntitySaveRestoreBlockHandler::ReadRestoreHeaders( IRestore *pRestore )
 	int nEntities;
 	pRestore->ReadInt( &nEntities );
 
-	entitytable_t *pEntityTable = ( entitytable_t *)engine->SaveAllocMemory( (sizeof(entitytable_t) * nEntities), sizeof(char) );
+	entitytable_t *pEntityTable = ( entitytable_t *)SaveRestoreAllocMemory( (sizeof(entitytable_t) * nEntities), sizeof(char) );
 	if ( !pEntityTable )
 	{
 		return;
@@ -2569,7 +2597,11 @@ void CEntitySaveRestoreBlockHandler::Restore( IRestore *pRestore, bool createPla
 			if ( pEntInfo->edictindex == 0 )	// worldspawn
 			{
 				Assert( i == 0 );
+#if defined(HL2_DLL) && !defined(HL2MP)
+				pent = SpmpIsRestoringWorld() ? GetWorldEntity() : CreateEntityByName( STRING(pEntInfo->classname) );
+#else
 				pent = CreateEntityByName( STRING(pEntInfo->classname) );
+#endif
 				pRestore->SetReadPos( pEntInfo->location );
 				if ( RestoreEntity( pent, pRestore, pEntInfo ) < 0 )
 				{
@@ -2593,6 +2625,11 @@ void CEntitySaveRestoreBlockHandler::Restore( IRestore *pRestore, bool createPla
 
 				edict_t *ed = INDEXENT( pEntInfo->edictindex );
 
+#if defined(HL2_DLL) && !defined(HL2MP)
+				if ( SpmpIsRestoringWorld() )
+					pent = SpmpPlayerForSavedSlot(pEntInfo->edictindex);
+				else
+#endif
 				if ( ed && createPlayers )
 				{
 					// create the player
@@ -2775,7 +2812,7 @@ bool CEntitySaveRestoreBlockHandler::SaveInitEntities( CSaveRestoreData *pSaveDa
 #else
 	number_of_entities = ClientEntityList().NumberOfEntities( true );
 #endif
-	entitytable_t *pEntityTable = ( entitytable_t *)engine->SaveAllocMemory( (sizeof(entitytable_t) * number_of_entities), sizeof(char) );
+	entitytable_t *pEntityTable = ( entitytable_t *)SaveRestoreAllocMemory( (sizeof(entitytable_t) * number_of_entities), sizeof(char) );
 	if ( !pEntityTable )
 		return false;
 
@@ -3024,7 +3061,7 @@ CSaveRestoreData *SaveInit( int size )
 	numentities = ClientEntityList().NumberOfEntities();
 #endif
 
-	void *pSaveMemory = engine->SaveAllocMemory( sizeof(CSaveRestoreData) + (sizeof(entitytable_t) * numentities) + size, sizeof(char) );
+	void *pSaveMemory = SaveRestoreAllocMemory( sizeof(CSaveRestoreData) + (sizeof(entitytable_t) * numentities) + size, sizeof(char) );
 	if ( !pSaveMemory )
 	{
 		return NULL;
@@ -3034,10 +3071,11 @@ CSaveRestoreData *SaveInit( int size )
 	pSaveData->Init( (char *)(pSaveData + 1), size );	// skip the save structure
 	
 	const int nTokens = 0xfff; // Assume a maximum of 4K-1 symbol table entries(each of some length)
-	pSaveMemory = engine->SaveAllocMemory( nTokens, sizeof( char * ) );
+	pSaveMemory = SaveRestoreAllocMemory( nTokens, sizeof( char * ) );
 	if ( !pSaveMemory )
 	{
-		engine->SaveFreeMemory( pSaveMemory );
+		pSaveData->~CSaveRestoreData();
+		SaveRestoreFreeMemory( pSaveData );
 		return NULL;
 	}
 

@@ -94,6 +94,8 @@ public:
 	void			Teleport( const Vector *newPosition, const QAngle *newAngles, const Vector *newVelocity );
 	virtual void	Think( void );
 	CFourWheelVehiclePhysics *GetPhysics( void ) { return &m_VehiclePhysics; }
+	bool RebuildPhysicsControllerAfterRestore();
+	virtual void OnSave( IEntitySaveUtils *pSaveUtils );
 	CBasePlayer		*HasPhysicsAttacker( float dt );
 	void			OnPhysGunPickup( CBasePlayer *pPhysGunUser, PhysGunPickup_t reason );
 
